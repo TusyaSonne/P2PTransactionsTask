@@ -19,6 +19,15 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+/**
+ * Юнит-тесты для {@link AccountService}.
+ * <p>
+ * Проверяются операции создания, получения, закрытия и фильтрации счетов.
+ * Используются моки для {@link AccountDao} и проверка аргументов через {@link ArgumentCaptor}.
+ * </p>
+ *
+ * @author Dzhenbaz
+ */
 @ExtendWith(MockitoExtension.class)
 public class AccountServiceTest {
     @Mock
@@ -27,6 +36,9 @@ public class AccountServiceTest {
     @InjectMocks
     private AccountService accountService;
 
+    /**
+     * Проверяет, что метод {@code createAccount} корректно сохраняет новый счёт через DAO.
+     */
     @Test
     void createAccount_shouldSaveAccount() {
         Long userId = 1L;
@@ -44,6 +56,9 @@ public class AccountServiceTest {
         assertNotNull(saved.getCreatedAt());
     }
 
+    /**
+     * Проверяет, что метод {@code getAccountById} возвращает счёт, если он существует и принадлежит пользователю.
+     */
     @Test
     void getAccountById_shouldReturnAccount_whenExistsAndOwned() {
         Long userId = 1L;
@@ -57,6 +72,9 @@ public class AccountServiceTest {
         assertEquals(account, result);
     }
 
+    /**
+     * Проверяет, что {@code getAccountById} выбрасывает исключение, если счёт принадлежит другому пользователю.
+     */
     @Test
     void getAccountById_shouldThrow_whenAccountNotOwned() {
         Long userId = 1L;
@@ -69,6 +87,9 @@ public class AccountServiceTest {
                 () -> accountService.getAccountById(userId, accountId));
     }
 
+    /**
+     * Проверяет, что {@code closeAccount} вызывает закрытие счёта, если он открыт.
+     */
     @Test
     void closeAccount_shouldCallDaoIfOpen() {
         Long userId = 1L;
@@ -82,6 +103,9 @@ public class AccountServiceTest {
         verify(accountDao).closeAccount(accountId);
     }
 
+    /**
+     * Проверяет, что {@code getAccountById} выбрасывает {@link AccountNotFoundException}, если счёт не найден.
+     */
     @Test
     void getAccountById_shouldThrow_whenNotFound() {
         when(accountDao.findById(42L)).thenReturn(Optional.empty());
@@ -90,6 +114,9 @@ public class AccountServiceTest {
                 () -> accountService.getAccountById(1L, 42L));
     }
 
+    /**
+     * Проверяет, что {@code getAllForUser} возвращает только открытые счета.
+     */
     @Test
     void getAllForUser_shouldReturnOpenAccountsOnly() {
         List<Account> accounts = List.of(
@@ -103,6 +130,9 @@ public class AccountServiceTest {
         assertEquals(1L, result.get(0).getAccountId());
     }
 
+    /**
+     * Проверяет, что {@code closeAccount} выбрасывает {@link AccountClosedException}, если счёт уже закрыт.
+     */
     @Test
     void closeAccount_shouldThrow_whenAlreadyClosed() {
         Account acc = new Account(1L, 1L, 1000L, true, LocalDateTime.now());

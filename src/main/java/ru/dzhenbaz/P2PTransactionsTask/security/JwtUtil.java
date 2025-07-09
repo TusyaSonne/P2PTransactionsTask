@@ -11,12 +11,29 @@ import org.springframework.stereotype.Component;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
+/**
+ * Утилита для генерации и валидации JWT-токенов.
+ * <p>
+ * Используется для аутентификации пользователей в REST API.
+ * Генерирует токен с claim {@code userId} и проверяет его подпись и срок действия.
+ * </p>
+ *
+ * <p>Алгоритм подписи — HMAC256 с секретом, загружаемым из конфигурации.</p>
+ *
+ * @author Dzhenbaz
+ */
 @Component
 public class JwtUtil {
 
     @Value("${jwt.secret}")
     private String secret;
 
+    /**
+     * Генерирует JWT-токен с claim {@code userId}, сроком действия 60 минут.
+     *
+     * @param userId идентификатор пользователя
+     * @return строка — валидный JWT-токен
+     */
     public String generateToken(Long userId) {
         Date expirationDate = Date.from(ZonedDateTime.now().plusMinutes(60).toInstant());
 
@@ -29,6 +46,13 @@ public class JwtUtil {
                 .sign(Algorithm.HMAC256(secret));
     }
 
+    /**
+     * Проверяет JWT-токен и извлекает {@code userId} из claim'а.
+     *
+     * @param token строка JWT-токена
+     * @return userId, если токен валиден
+     * @throws JWTVerificationException если токен просрочен, недействителен или имеет неправильную подпись
+     */
     public Long validateTokenAndRetrieveClaim(String token) throws JWTVerificationException {
         JWTVerifier verifier = JWT.require(Algorithm.HMAC256(secret))
                 .withSubject("User details")

@@ -6,6 +6,18 @@ import ru.dzhenbaz.P2PTransactionsTask.model.Account;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * {@link RowMapper} для преобразования строки из таблицы {@code account}
+ * в объект {@link Account}.
+ * <p>
+ * Используется в реализации {@code AccountDao} при выполнении SQL-запросов с {@code JdbcTemplate}.
+ * </p>
+ *
+ * <p><b>Примечание:</b> поле {@code balance} интерпретируется как {@code Long} в копейках,
+ * поле {@code created_at} преобразуется в {@code LocalDateTime}.</p>
+ *
+ * @author Dzhenbaz
+ */
 public class AccountRowMapper implements RowMapper<Account> {
     @Override
     public Account mapRow(ResultSet rs, int rowNum) throws SQLException {

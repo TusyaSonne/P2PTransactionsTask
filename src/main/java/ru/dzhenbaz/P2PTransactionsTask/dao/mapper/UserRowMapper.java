@@ -6,6 +6,17 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+/**
+ * {@link RowMapper} для преобразования строки из таблицы {@code users}
+ * в объект {@link User}.
+ * <p>
+ * Используется в реализации {@code UserDao} при выполнении SQL-запросов через {@code JdbcTemplate}.
+ * </p>
+ *
+ * <p><b>Примечание:</b> поле {@code created_at} преобразуется в {@code LocalDateTime}.</p>
+ *
+ * @author Dzhenbaz
+ */
 public class UserRowMapper implements RowMapper<User> {
 
     @Override

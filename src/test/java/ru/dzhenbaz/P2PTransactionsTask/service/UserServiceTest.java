@@ -15,6 +15,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+/**
+ * Юнит-тесты для {@link UserService}.
+ * <p>
+ * Покрывает основные методы получения пользователей по логину и ID.
+ * Использует Mockito для подмены {@link UserDao}.
+ * </p>
+ *
+ * @author Dzhenbaz
+ */
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
 
@@ -24,6 +33,9 @@ public class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
+    /**
+     * Проверяет, что {@code findByUsername} возвращает пользователя, если он найден в БД.
+     */
     @Test
     void findByUsername_shouldReturnUser_whenExists() {
         String username = "testuser";
@@ -36,6 +48,9 @@ public class UserServiceTest {
         assertEquals(expected, result.get());
     }
 
+    /**
+     * Проверяет, что {@code findByUsername} возвращает {@code Optional.empty()}, если пользователь не найден.
+     */
     @Test
     void findByUsername_shouldReturnEmpty_whenNotFound() {
         when(userDao.findByUsername("missing")).thenReturn(Optional.empty());
@@ -45,6 +60,9 @@ public class UserServiceTest {
         assertTrue(result.isEmpty());
     }
 
+    /**
+     * Проверяет, что {@code findById} возвращает пользователя, если он найден в БД.
+     */
     @Test
     void findById_shouldReturnUser_whenExists() {
         User expected = new User(1L, "test", "hashed", LocalDateTime.now());
@@ -56,6 +74,9 @@ public class UserServiceTest {
         assertEquals(expected, result.get());
     }
 
+    /**
+     * Проверяет, что {@code findById} возвращает {@code Optional.empty()}, если пользователь не найден.
+     */
     @Test
     void findById_shouldReturnEmpty_whenNotFound() {
         when(userDao.findById(999L)).thenReturn(Optional.empty());

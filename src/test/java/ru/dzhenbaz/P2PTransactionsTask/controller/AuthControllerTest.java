@@ -15,6 +15,14 @@ import ru.dzhenbaz.P2PTransactionsTask.dto.RegisterRequest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Интеграционные тесты для {@link AuthController}.
+ * <p>Проверяется корректность регистрации, логина, обработка ошибок и повторных попыток.</p>
+ *
+ * Используется {@link SpringBootTest} с {@link MockMvc} для имитации HTTP-запросов.
+ *
+ * @author Dzhenbaz
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AuthControllerTest {
@@ -25,6 +33,9 @@ public class AuthControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    /**
+     * Проверяет, что регистрация нового пользователя и последующий вход проходят успешно.
+     */
     @Test
     void register_thenLogin_shouldSucceed() throws Exception {
         RegisterRequest register = new RegisterRequest("testuser", "password123");
@@ -44,6 +55,9 @@ public class AuthControllerTest {
                 .andExpect(jsonPath("$.token").isNotEmpty());
     }
 
+    /**
+     * Проверяет, что попытка зарегистрировать уже существующего пользователя вызывает 400 Bad Request.
+     */
     @Test
     void register_existingUser_shouldReturnBadRequest() throws Exception {
         RegisterRequest register = new RegisterRequest("existinguser", "pass");
@@ -60,6 +74,9 @@ public class AuthControllerTest {
                 .andExpect(content().string("Пользователь уже существует"));
     }
 
+    /**
+     * Проверяет, что при неверном пароле возвращается 401 Unauthorized.
+     */
     @Test
     void login_wrongPassword_shouldFail() throws Exception {
         RegisterRequest register = new RegisterRequest("user2", "correctpass");

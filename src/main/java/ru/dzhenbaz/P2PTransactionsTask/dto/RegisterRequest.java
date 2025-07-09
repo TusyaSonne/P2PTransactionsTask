@@ -5,13 +5,32 @@ import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * DTO-запрос для регистрации нового пользователя.
+ * <p>
+ * Содержит логин и пароль, которые пользователь передаёт при создании учётной записи.
+ * </p>
+ *
+ * <p>Поля валидируются через аннотации {@code @NotNull} и {@code @Size}.</p>
+ *
+ * @author Dzhenbaz
+ */
 @Data
 @AllArgsConstructor
 public class RegisterRequest {
 
+    /**
+     * Имя пользователя (логин).
+     * Не может быть {@code null} и не должно превышать 50 символов.
+     */
     @NotNull(message = "Никнейм не может быть пустым")
     @Size(max = 50, message = "Никнейм не может быть длиннее 50 символов")
     private String username;
+
+    /**
+     * Пароль пользователя.
+     * Не может быть {@code null} и должен содержать не менее 5 символов.
+     */
     @NotNull(message = "Пароль не может быть пустым")
     @Size(min = 4, message = "Пароль должен быть минимум 5 символов")
     private String password;

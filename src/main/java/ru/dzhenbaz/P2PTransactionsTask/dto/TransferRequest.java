@@ -6,18 +6,46 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * DTO-запрос на перевод средств между счетами (P2P).
+ * <p>
+ * Используется при обращении к API перевода. Поддерживает двухэтапное подтверждение операции.
+ * </p>
+ *
+ * <p>Все числовые значения валидируются через {@code @NotNull} и {@code @Min}.</p>
+ *
+ * @author Dzhenbaz
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class TransferRequest {
 
+    /**
+     * Идентификатор счёта-отправителя.
+     * Не может быть {@code null}.
+     */
     @NotNull(message = "Необходимо указать id счета-отправителя")
     private Long fromAccountId;
+
+    /**
+     * Идентификатор счёта-получателя.
+     * Не может быть {@code null}.
+     */
     @NotNull(message = "Необходимо указать id счета-получателя")
     private Long toAccountId;
+
+    /**
+     * Сумма перевода (в копейках).
+     * Должна быть положительной.
+     */
     @NotNull(message = "Необходимо указать сумму перевода")
     @Min(value = 0, message = "Сумма перевода не может быть отрицательной")
     private Long amount;
 
+    /**
+     * Флаг подтверждения перевода.
+     * {@code true} — операция будет выполнена, {@code false} — вернётся сообщение с запросом на подтверждение.
+     */
     private boolean confirm;
 }

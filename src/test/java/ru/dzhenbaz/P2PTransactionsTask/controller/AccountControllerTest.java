@@ -18,6 +18,13 @@ import java.time.LocalDateTime;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Интеграционные тесты для {@link AccountController}.
+ * Проверяет создание, получение и закрытие счетов с учетом авторизации и валидации.
+ * Использует настоящую реализацию {@link JwtUtil} и {@link UserDao}.
+ *
+ * @author Dzhenbaz
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AccountControllerTest {
@@ -37,6 +44,9 @@ public class AccountControllerTest {
     private String token;
     private Long userId;
 
+    /**
+     * Устанавливает начальные данные: создаёт пользователя и генерирует токен.
+     */
     @BeforeEach
     void setUp() {
         userDao.deleteAll();
@@ -47,6 +57,9 @@ public class AccountControllerTest {
         token = "Bearer " + jwtUtil.generateToken(userId);
     }
 
+    /**
+     * Проверяет успешное создание счёта с положительным балансом.
+     */
     @Test
     void createAccount_shouldSucceed() throws Exception {
         CreateAccountRequest request = new CreateAccountRequest(1000L);
@@ -59,6 +72,9 @@ public class AccountControllerTest {
                 .andExpect(content().string("Счёт создан"));
     }
 
+    /**
+     * Проверяет отклонение запроса на создание счёта с отрицательным балансом.
+     */
     @Test
     void createAccount_shouldFailWithNegativeBalance() throws Exception {
         CreateAccountRequest request = new CreateAccountRequest(-500L);
@@ -70,6 +86,9 @@ public class AccountControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Проверяет, что список счетов изначально пустой.
+     */
     @Test
     void getAllAccounts_shouldReturnEmptyInitially() throws Exception {
         mockMvc.perform(get("/accounts")
@@ -78,6 +97,9 @@ public class AccountControllerTest {
                 .andExpect(content().json("[]"));
     }
 
+    /**
+     * Проверяет, что при запросе несуществующего счёта возвращается 404.
+     */
     @Test
     void getAccount_shouldReturn404_whenNotFound() throws Exception {
         mockMvc.perform(get("/accounts/999")
@@ -85,6 +107,9 @@ public class AccountControllerTest {
                 .andExpect(status().isNotFound());
     }
 
+    /**
+     * Проверяет, что при попытке закрытия несуществующего счёта возвращается 404.
+     */
     @Test
     void closeAccount_shouldReturn404_whenNotFound() throws Exception {
         mockMvc.perform(post("/accounts/999/close")

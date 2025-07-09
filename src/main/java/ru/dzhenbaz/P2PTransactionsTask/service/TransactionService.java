@@ -13,18 +13,49 @@ import ru.dzhenbaz.P2PTransactionsTask.model.Transaction;
 
 import java.time.LocalDateTime;
 
+/**
+ * Сервис для выполнения P2P-переводов между счетами.
+ * <p>
+ * Выполняет проверку данных перевода, валидацию счетов и их принадлежности,
+ * а также обновляет балансы и сохраняет запись о транзакции.
+ * </p>
+ *
+ * <p>Операция перевода выполняется в транзакции с использованием {@link @Transactional}.</p>
+ *
+ * @author Dzhenbaz
+ */
 @Service
 public class TransactionService {
 
     private final AccountDao accountDao;
     private final TransactionDao transactionDao;
 
+    /**
+     * Конструктор с внедрением зависимостей.
+     *
+     * @param accountDao     DAO для доступа к счетам
+     * @param transactionDao DAO для работы с транзакциями
+     */
     @Autowired
     public TransactionService(AccountDao accountDao, TransactionDao transactionDao) {
         this.accountDao = accountDao;
         this.transactionDao = transactionDao;
     }
 
+    /**
+     * Выполняет перевод средств между счетами.
+     * <p>Поддерживает двухшаговое подтверждение: при первом вызове с {@code confirm = false}
+     * возвращает строку с запросом на подтверждение, при повторном (с {@code confirm = true})
+     * — проводит операцию.</p>
+     *
+     * @param userId  идентификатор пользователя-отправителя (владелец счёта-источника)
+     * @param request объект запроса на перевод
+     * @return результат операции в виде строки
+     *
+     * @throws BadRequestException если сумма отрицательная, счёт закрыт, перевод в самого себя,
+     *                             неподтверждённый запрос или недостаточно средств
+     * @throws NotFoundException если счёт-источник или счёт-получатель не существует
+     */
     @Transactional
     public String transfer(Long userId, TransferRequest request) {
         Long fromId = request.getFromAccountId();

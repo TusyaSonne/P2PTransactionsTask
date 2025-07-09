@@ -22,6 +22,15 @@ import java.time.LocalDateTime;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+/**
+ * Интеграционные тесты для {@link TransactionController}.
+ * Проверяются сценарии перевода между счетами: успешные переводы,
+ * валидационные ошибки, закрытые или отсутствующие счета.
+ *
+ * Использует реальные бины Spring Boot, MockMvc и H2-базу.
+ *
+ * @author Dzhenbaz
+ */
 @SpringBootTest
 @AutoConfigureMockMvc
 public class TransactionControllerTest {
@@ -43,6 +52,10 @@ public class TransactionControllerTest {
     private Long fromAccountId;
     private Long toAccountId;
 
+    /**
+     * Подготавливает пользователя, токен и два счёта:
+     * один отправитель и один получатель.
+     */
     @BeforeEach
     void setUp() {
         transactionDao.deleteAll();
@@ -65,6 +78,10 @@ public class TransactionControllerTest {
         toAccountId = accountDao.findByUserId(userId).get(1).getId();
     }
 
+    /**
+     * Проверяет, что без подтверждения возвращается сообщение-подтверждение,
+     * но перевод не выполняется.
+     */
     @Test
     void transfer_shouldReturnConfirmationMessage_ifNotConfirmed() throws Exception {
         TransferRequest request = new TransferRequest(fromAccountId, toAccountId, 500L, false);
@@ -78,6 +95,10 @@ public class TransactionControllerTest {
                         request.getAmount(), fromAccountId, toAccountId)));
     }
 
+    /**
+     * Проверяет успешное выполнение перевода при наличии средств
+     * и подтверждении операции.
+     */
     @Test
     void transfer_shouldCompleteSuccessfully_whenConfirmed() throws Exception {
         TransferRequest request = new TransferRequest(fromAccountId, toAccountId, 500L, true);
@@ -90,6 +111,9 @@ public class TransactionControllerTest {
                 .andExpect(content().string("Перевод выполнен"));
     }
 
+    /**
+     * Проверяет, что отрицательная сумма вызывает ошибку 400.
+     */
     @Test
     void transfer_shouldFail_whenAmountIsInvalid() throws Exception {
         TransferRequest request = new TransferRequest(fromAccountId, toAccountId, -100L, true);
@@ -101,6 +125,9 @@ public class TransactionControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Проверяет, что перевод на тот же счёт запрещён.
+     */
     @Test
     void transfer_shouldFail_whenSameAccount() throws Exception {
         TransferRequest request = new TransferRequest(fromAccountId, fromAccountId, 100L, true);
@@ -112,6 +139,9 @@ public class TransactionControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Проверяет, что при недостатке средств возвращается ошибка 400.
+     */
     @Test
     void transfer_shouldFail_whenInsufficientFunds() throws Exception {
         TransferRequest request = new TransferRequest(fromAccountId, toAccountId, 2000L, true);
@@ -123,6 +153,9 @@ public class TransactionControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Проверяет, что перевод на закрытый счёт невозможен.
+     */
     @Test
     void transfer_shouldFail_whenToAccountClosed() throws Exception {
         accountDao.closeAccount(toAccountId);
@@ -136,6 +169,9 @@ public class TransactionControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
+    /**
+     * Проверяет, что при отсутствии счёта получателя возвращается 404.
+     */
     @Test
     void transfer_shouldFail_whenToAccountNotFound() throws Exception {
         TransferRequest request = new TransferRequest(fromAccountId, 999999L, 100L, true);

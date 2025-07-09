@@ -18,6 +18,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.*;
 
+/**
+ * Юнит-тесты для {@link AuthService}.
+ * <p>
+ * Проверяет корректность поведения при регистрации и аутентификации пользователей.
+ * Использует заглушки (Mockito) для зависимостей: {@link UserService}, {@link PasswordEncoder}, {@link JwtUtil}, {@link UserDao}.
+ * </p>
+ *
+ * <p>Тестируются как успешные сценарии, так и граничные условия (уже существующий пользователь, неверный пароль и т.д.).</p>
+ *
+ * @author Dzhenbaz
+ */
 public class AuthServiceTest {
 
     private UserService userService;
@@ -26,6 +37,9 @@ public class AuthServiceTest {
     private UserDao userDao;
     private AuthService authService;
 
+    /**
+     * Инициализация моков перед каждым тестом.
+     */
     @BeforeEach
     void setUp() {
         userService = mock(UserService.class);
@@ -35,6 +49,9 @@ public class AuthServiceTest {
         authService = new AuthService(userService, passwordEncoder, jwtUtil, userDao);
     }
 
+    /**
+     * Тест: регистрация должна вернуть 400, если пользователь уже существует.
+     */
     @Test
     void register_shouldReturnBadRequest_whenUserExists() {
         RegisterRequest request = new RegisterRequest("existing", "password");
@@ -46,6 +63,9 @@ public class AuthServiceTest {
         assertEquals("Пользователь уже существует", response.getBody());
     }
 
+    /**
+     * Тест: регистрация нового пользователя должна завершаться успешно и сохранять пользователя.
+     */
     @Test
     void register_shouldSaveUser_whenNewUser() {
         RegisterRequest request = new RegisterRequest("newuser", "password");
@@ -59,6 +79,9 @@ public class AuthServiceTest {
         assertEquals("Пользователь зарегистрирован", response.getBody());
     }
 
+    /**
+     * Тест: при попытке входа с несуществующим пользователем возвращается 401.
+     */
     @Test
     void login_shouldReturnUnauthorized_whenUserNotFound() {
         LoginRequest request = new LoginRequest("unknown", "password");
@@ -70,6 +93,9 @@ public class AuthServiceTest {
         assertEquals("Неверные учетные данные", response.getBody());
     }
 
+    /**
+     * Тест: при неправильном пароле вход завершается ошибкой 401.
+     */
     @Test
     void login_shouldReturnUnauthorized_whenPasswordIncorrect() {
         LoginRequest request = new LoginRequest("user", "wrongpass");
@@ -84,6 +110,9 @@ public class AuthServiceTest {
         assertEquals("Неверные учетные данные", response.getBody());
     }
 
+    /**
+     * Тест: успешный вход должен вернуть JWT-токен.
+     */
     @Test
     void login_shouldReturnToken_whenCredentialsValid() {
         LoginRequest request = new LoginRequest("user", "correctpass");

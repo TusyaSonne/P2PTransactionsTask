@@ -20,6 +20,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
+/**
+ * Юнит-тесты для {@link TransactionService}.
+ * <p>
+ * Тестирует P2P-переводы между счетами: успешные переводы, подтверждение, ошибки при валидации, отсутствии аккаунтов и др.
+ * Используются моки для {@link AccountDao} и {@link TransactionDao}.
+ * </p>
+ *
+ * @author Dzhenbaz
+ */
 @ExtendWith(MockitoExtension.class)
 public class TransactionServiceTest {
     @Mock
@@ -31,6 +40,9 @@ public class TransactionServiceTest {
     @InjectMocks
     private TransactionService transactionService;
 
+    /**
+     * Проверяет, что при неподтверждённом переводе возвращается сообщение с просьбой подтвердить.
+     */
     @Test
     void transfer_shouldReturnConfirmationMessage_whenNotConfirmed() {
         Long userId = 1L;
@@ -48,6 +60,9 @@ public class TransactionServiceTest {
         verify(transactionDao, never()).save(any());
     }
 
+    /**
+     * Проверяет успешное выполнение перевода при наличии подтверждения.
+     */
     @Test
     void transfer_shouldExecuteTransfer_whenConfirmed() {
         Long userId = 1L;
@@ -66,18 +81,27 @@ public class TransactionServiceTest {
         verify(transactionDao).save(any(Transaction.class));
     }
 
+    /**
+     * Проверяет, что перевод с нулевой суммой выбрасывает исключение {@link BadRequestException}.
+     */
     @Test
     void transfer_shouldThrow_whenAmountIsInvalid() {
         TransferRequest request = new TransferRequest(10L, 20L, 0L, true);
         assertThrows(BadRequestException.class, () -> transactionService.transfer(1L, request));
     }
 
+    /**
+     * Проверяет, что перевод на тот же счёт выбрасывает {@link BadRequestException}.
+     */
     @Test
     void transfer_shouldThrow_whenSameAccount() {
         TransferRequest request = new TransferRequest(10L, 10L, 100L, true);
         assertThrows(BadRequestException.class, () -> transactionService.transfer(1L, request));
     }
 
+    /**
+     * Проверяет поведение при отсутствии счёта отправителя.
+     */
     @Test
     void transfer_shouldThrow_whenFromAccountNotFound() {
         TransferRequest request = new TransferRequest(10L, 20L, 100L, true);
@@ -85,6 +109,9 @@ public class TransactionServiceTest {
         assertThrows(NotFoundException.class, () -> transactionService.transfer(1L, request));
     }
 
+    /**
+     * Проверяет поведение при отсутствии счёта получателя.
+     */
     @Test
     void transfer_shouldThrow_whenToAccountNotFound() {
         TransferRequest request = new TransferRequest(10L, 20L, 100L, true);
@@ -95,6 +122,9 @@ public class TransactionServiceTest {
         assertThrows(NotFoundException.class, () -> transactionService.transfer(1L, request));
     }
 
+    /**
+     * Проверяет, что пользователь не может переводить с чужого счёта.
+     */
     @Test
     void transfer_shouldThrow_whenFromAccountNotOwned() {
         TransferRequest request = new TransferRequest(10L, 20L, 100L, true);
@@ -104,6 +134,9 @@ public class TransactionServiceTest {
         assertThrows(BadRequestException.class, () -> transactionService.transfer(1L, request));
     }
 
+    /**
+     * Проверяет, что перевод невозможен, если хотя бы один из счетов закрыт.
+     */
     @Test
     void transfer_shouldThrow_whenAnyAccountIsClosed() {
         TransferRequest request = new TransferRequest(10L, 20L, 100L, true);
@@ -116,6 +149,9 @@ public class TransactionServiceTest {
         assertThrows(BadRequestException.class, () -> transactionService.transfer(1L, request));
     }
 
+    /**
+     * Проверяет, что перевод невозможен при недостаточном балансе.
+     */
     @Test
     void transfer_shouldThrow_whenInsufficientFunds() {
         TransferRequest request = new TransferRequest(10L, 20L, 2000L, true);
@@ -128,6 +164,9 @@ public class TransactionServiceTest {
         assertThrows(BadRequestException.class, () -> transactionService.transfer(1L, request));
     }
 
+    /**
+     * Проверяет, что null в поле суммы вызывает {@link BadRequestException}.
+     */
     @Test
     void transfer_shouldThrow_whenAmountIsNull() {
         TransferRequest request = new TransferRequest(10L, 20L, null, true);

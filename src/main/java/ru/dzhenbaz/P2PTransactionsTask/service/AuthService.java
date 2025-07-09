@@ -13,6 +13,18 @@ import ru.dzhenbaz.P2PTransactionsTask.security.JwtUtil;
 
 import java.time.LocalDateTime;
 
+/**
+ * Сервис авторизации и регистрации пользователей.
+ * <p>
+ * Отвечает за обработку запросов на вход в систему и создание новых пользователей,
+ * включая хеширование пароля и генерацию JWT-токена.
+ * </p>
+ *
+ * <p>Выполняет проверку существования пользователя при регистрации и валидацию
+ * учетных данных при входе.</p>
+ *
+ * @author Dzhenbaz
+ */
 @Service
 public class AuthService {
 
@@ -21,6 +33,14 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final UserDao userDao;
 
+    /**
+     * Конструктор с внедрением зависимостей.
+     *
+     * @param userService сервис для получения пользователей
+     * @param passwordEncoder компонент для хеширования паролей
+     * @param jwtUtil утилита для генерации JWT
+     * @param userDao DAO для сохранения новых пользователей
+     */
     @Autowired
     public AuthService(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, UserDao userDao) {
         this.userService = userService;
@@ -29,6 +49,13 @@ public class AuthService {
         this.userDao = userDao;
     }
 
+    /**
+     * Регистрирует нового пользователя.
+     * <p>Если пользователь с таким логином уже существует — возвращает 400.</p>
+     *
+     * @param request данные регистрации (логин и пароль)
+     * @return HTTP-ответ: успех или ошибка
+     */
     public ResponseEntity<?> register(RegisterRequest request) {
         if (userService.findByUsername(request.getUsername()).isPresent()) {
             return ResponseEntity.badRequest().body("Пользователь уже существует");
@@ -40,6 +67,13 @@ public class AuthService {
         return ResponseEntity.ok("Пользователь зарегистрирован");
     }
 
+    /**
+     * Аутентифицирует пользователя и выдает JWT-токен при успешной проверке.
+     * <p>В случае ошибки возвращает статус 401.</p>
+     *
+     * @param request логин и пароль пользователя
+     * @return JWT-токен в случае успеха или сообщение об ошибке
+     */
     public ResponseEntity<?> login(LoginRequest request) {
         var userOpt = userService.findByUsername(request.getUsername());
 

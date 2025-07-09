@@ -7,11 +7,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+/**
+ * Аспект для логирования вызовов сервисных методов.
+ * <p>
+ * Логирует имя метода, время выполнения и исключения (если есть)
+ * для всех методов из пакета {@code ru.dzhenbaz.P2PTransactionsTask.service}.
+ * </p>
+ *
+ * <p>Использует Spring AOP и аннотацию {@code @Around} для обёртки выполнения.</p>
+ *
+ * @author Dzhenbaz
+ */
 @Aspect
 @Component
 public class LoggingAspect {
+
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
+    /**
+     * Логирует время выполнения сервисного метода и перехватывает исключения.
+     *
+     * @param joinPoint точка соединения — метод в сервисе
+     * @return результат выполнения метода
+     * @throws Throwable если метод выбрасывает исключение
+     */
     @Around("execution(* ru.dzhenbaz.P2PTransactionsTask.service..*(..))")
     public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
         String method = joinPoint.getSignature().toShortString();
