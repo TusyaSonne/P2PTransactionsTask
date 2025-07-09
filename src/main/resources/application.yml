@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: P2PTransactionsTask
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/p2p_transactions_db
+    username: postgres
+    password: postgres
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yml
+
+
+jwt:
+  secret: SECRET
