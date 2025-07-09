@@ -25,7 +25,7 @@ public class LoginRequest {
      * Имя пользователя (логин).
      * Не может быть {@code null} и не должен превышать 50 символов.
      */
-    @Schema(description = "Имя пользователя (никнейм)", example = "dzhenbaz", required = true, maxLength = 50)
+    @Schema(description = "Имя пользователя (никнейм)", example = "test", required = true, maxLength = 50)
     @NotNull(message = "Никнейм не может быть пустым")
     @Size(max = 50, message = "Никнейм не может быть длиннее 50 символов")
     private String username;
@@ -34,7 +34,7 @@ public class LoginRequest {
      * Пароль пользователя.
      * Не может быть {@code null}.
      */
-    @Schema(description = "Пароль пользователя", example = "mySecretPass", required = true)
+    @Schema(description = "Пароль пользователя", example = "12345", required = true)
     @NotNull(message = "Пароль не может быть пустым")
     private String password;
 }

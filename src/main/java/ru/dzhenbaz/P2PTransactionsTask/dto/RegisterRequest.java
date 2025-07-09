@@ -25,16 +25,16 @@ public class RegisterRequest {
      * Имя пользователя (логин).
      * Не может быть {@code null} и не должно превышать 50 символов.
      */
-    @Schema(description = "Имя пользователя (никнейм)", example = "dzhenbaz", required = true, maxLength = 50)
+    @Schema(description = "Имя пользователя (никнейм)", example = "test", required = true, maxLength = 50)
     @NotNull(message = "Никнейм не может быть пустым")
     @Size(max = 50, message = "Никнейм не может быть длиннее 50 символов")
     private String username;
 
     /**
      * Пароль пользователя.
-     * Не может быть {@code null} и должен содержать не менее 5 символов.
+     * Не может быть {@code null} и должен содержать не менее 4 символов.
      */
-    @Schema(description = "Пароль (минимум 4 символов)", example = "securePass123", required = true, minLength = 4)
+    @Schema(description = "Пароль (минимум 4 символов)", example = "12345", required = true, minLength = 4)
     @NotNull(message = "Пароль не может быть пустым")
     @Size(min = 4, message = "Пароль должен быть минимум 4 символов")
     private String password;

@@ -33,7 +33,7 @@ import ru.dzhenbaz.P2PTransactionsTask.service.AuthService;
  */
 @RestController
 @RequestMapping("/auth")
-@Tag(name = "Аутентификация", description = "Регистрация и вход пользователей")
+@Tag(name = "1. Аутентификация", description = "Регистрация и вход пользователей")
 public class AuthController {
 
     private final AuthService authService;

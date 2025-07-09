@@ -32,7 +32,7 @@ import ru.dzhenbaz.P2PTransactionsTask.service.TransactionService;
  * @author Dzhenbaz
  */
 @SecurityRequirement(name = "BearerAuth")
-@Tag(name = "Переводы", description = "Операции перевода между счетами (P2P)")
+@Tag(name = "3. Переводы", description = "Операции перевода между счетами (P2P)")
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {

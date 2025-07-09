@@ -45,7 +45,7 @@ public class TransferRequest {
      */
     @NotNull(message = "Необходимо указать сумму перевода")
     @Min(value = 0, message = "Сумма перевода не может быть отрицательной")
-    @Schema(description = "Сумма перевода в копейках", example = "15000", required = true)
+    @Schema(description = "Сумма перевода в копейках", example = "10000", required = true)
     private Long amount;
 
     /**
