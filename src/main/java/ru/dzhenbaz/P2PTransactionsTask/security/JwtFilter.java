@@ -4,10 +4,8 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.dzhenbaz.P2PTransactionsTask.model.User;
 import ru.dzhenbaz.P2PTransactionsTask.service.UserService;
@@ -26,7 +24,6 @@ import java.io.IOException;
  *
  * @author Dzhenbaz
  */
-@Component
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
@@ -38,7 +35,6 @@ public class JwtFilter extends OncePerRequestFilter {
      * @param jwtUtil     утилита для работы с JWT
      * @param userService сервис для поиска пользователя по userId
      */
-    @Autowired
     public JwtFilter(JwtUtil jwtUtil, UserService userService) {
         this.jwtUtil = jwtUtil;
         this.userService = userService;

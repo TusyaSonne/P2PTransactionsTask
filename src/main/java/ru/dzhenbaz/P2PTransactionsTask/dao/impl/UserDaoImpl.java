@@ -1,8 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.dao.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Repository;
 import ru.dzhenbaz.P2PTransactionsTask.dao.UserDao;
 import ru.dzhenbaz.P2PTransactionsTask.dao.mapper.UserRowMapper;
 import ru.dzhenbaz.P2PTransactionsTask.model.User;
@@ -20,7 +18,6 @@ import java.util.Optional;
  *
  * @author Dzhenbaz
  */
-@Repository
 public class UserDaoImpl implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
@@ -31,7 +28,6 @@ public class UserDaoImpl implements UserDao {
      *
      * @param jdbcTemplate компонент для взаимодействия с БД
      */
-    @Autowired
     public UserDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }

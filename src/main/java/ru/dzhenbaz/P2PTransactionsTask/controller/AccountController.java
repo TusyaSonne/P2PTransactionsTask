@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dzhenbaz.P2PTransactionsTask.dto.CreateAccountRequest;
@@ -34,7 +33,7 @@ import ru.dzhenbaz.P2PTransactionsTask.service.AccountService;
  */
 @SecurityRequirement(name = "BearerAuth")
 @Tag(name = "2. Счета", description = "Операции с банковскими счетами пользователя")
-@RestController
+@RestController // создание бина все равно вручную, аннотация метит класс как контроллер для тестов и сваггера
 @RequestMapping("/accounts")
 public class AccountController {
 
@@ -47,7 +46,6 @@ public class AccountController {
      * @param accountService сервис управления счетами
      * @param jwtUtil        утилита для извлечения userId из JWT
      */
-    @Autowired
     public AccountController(AccountService accountService, JwtUtil jwtUtil) {
         this.accountService = accountService;
         this.jwtUtil = jwtUtil;

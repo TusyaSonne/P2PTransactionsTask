@@ -1,7 +1,5 @@
 package ru.dzhenbaz.P2PTransactionsTask.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import ru.dzhenbaz.P2PTransactionsTask.dao.AccountDao;
 import ru.dzhenbaz.P2PTransactionsTask.dto.AccountResponse;
 import ru.dzhenbaz.P2PTransactionsTask.exception.AccountClosedException;
@@ -23,7 +21,6 @@ import java.util.List;
  *
  * @author Dzhenbaz
  */
-@Service
 public class AccountService {
 
     private final AccountDao accountDao;
@@ -33,7 +30,6 @@ public class AccountService {
      *
      * @param accountDao DAO для доступа к счётам
      */
-    @Autowired
     public AccountService(AccountDao accountDao) {
         this.accountDao = accountDao;
     }

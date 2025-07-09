@@ -6,7 +6,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,7 +30,7 @@ import ru.dzhenbaz.P2PTransactionsTask.service.AuthService;
  *
  * @author Dzhenbaz
  */
-@RestController
+@RestController // создание бина все равно вручную, аннотация метит класс как контроллер для тестов и сваггера
 @RequestMapping("/auth")
 @Tag(name = "1. Аутентификация", description = "Регистрация и вход пользователей")
 public class AuthController {
@@ -43,7 +42,6 @@ public class AuthController {
      *
      * @param authService сервис авторизации и регистрации
      */
-    @Autowired
     public AuthController(AuthService authService) {
         this.authService = authService;
     }

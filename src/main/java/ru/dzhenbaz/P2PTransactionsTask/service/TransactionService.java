@@ -1,7 +1,5 @@
 package ru.dzhenbaz.P2PTransactionsTask.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dzhenbaz.P2PTransactionsTask.dao.AccountDao;
 import ru.dzhenbaz.P2PTransactionsTask.dao.TransactionDao;
@@ -24,7 +22,6 @@ import java.time.LocalDateTime;
  *
  * @author Dzhenbaz
  */
-@Service
 public class TransactionService {
 
     private final AccountDao accountDao;
@@ -36,7 +33,6 @@ public class TransactionService {
      * @param accountDao     DAO для доступа к счетам
      * @param transactionDao DAO для работы с транзакциями
      */
-    @Autowired
     public TransactionService(AccountDao accountDao, TransactionDao transactionDao) {
         this.accountDao = accountDao;
         this.transactionDao = transactionDao;

@@ -5,7 +5,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Component;
 
 /**
  * Аспект для логирования вызовов сервисных методов.
@@ -19,7 +18,6 @@ import org.springframework.stereotype.Component;
  * @author Dzhenbaz
  */
 @Aspect
-@Component
 public class LoggingAspect {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

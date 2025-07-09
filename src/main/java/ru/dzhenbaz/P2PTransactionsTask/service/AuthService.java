@@ -1,9 +1,7 @@
 package ru.dzhenbaz.P2PTransactionsTask.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
 import ru.dzhenbaz.P2PTransactionsTask.dao.UserDao;
 import ru.dzhenbaz.P2PTransactionsTask.dto.JwtResponse;
 import ru.dzhenbaz.P2PTransactionsTask.dto.LoginRequest;
@@ -25,7 +23,6 @@ import java.time.LocalDateTime;
  *
  * @author Dzhenbaz
  */
-@Service
 public class AuthService {
 
     private final UserService userService;
@@ -41,7 +38,6 @@ public class AuthService {
      * @param jwtUtil утилита для генерации JWT
      * @param userDao DAO для сохранения новых пользователей
      */
-    @Autowired
     public AuthService(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, UserDao userDao) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;

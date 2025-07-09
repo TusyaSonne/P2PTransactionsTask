@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dzhenbaz.P2PTransactionsTask.dto.TransferRequest;
@@ -33,7 +32,7 @@ import ru.dzhenbaz.P2PTransactionsTask.service.TransactionService;
  */
 @SecurityRequirement(name = "BearerAuth")
 @Tag(name = "3. Переводы", description = "Операции перевода между счетами (P2P)")
-@RestController
+@RestController // создание бина все равно вручную, аннотация метит класс как контроллер для тестов и сваггера
 @RequestMapping("/transactions")
 public class TransactionController {
 
@@ -46,7 +45,6 @@ public class TransactionController {
      * @param transactionService сервис для выполнения перевода
      * @param jwtUtil            утилита для извлечения userId из JWT
      */
-    @Autowired
     public TransactionController(TransactionService transactionService, JwtUtil jwtUtil) {
         this.transactionService = transactionService;
         this.jwtUtil = jwtUtil;
