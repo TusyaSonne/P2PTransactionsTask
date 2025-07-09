@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.dzhenbaz.P2PTransactionsTask.dao.TransactionDao;
@@ -14,6 +15,7 @@ public class TransactionDaoImpl implements TransactionDao {
     private final JdbcTemplate jdbcTemplate;
     private final TransactionRowMapper rowMapper = new TransactionRowMapper();
 
+    @Autowired
     public TransactionDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -37,5 +39,10 @@ public class TransactionDaoImpl implements TransactionDao {
                 accountId,
                 accountId
         );
+    }
+
+    @Override
+    public void deleteAll() {
+        jdbcTemplate.update("DELETE FROM transactions");
     }
 }

@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,6 +21,7 @@ public class AuthService {
     private final JwtUtil jwtUtil;
     private final UserDao userDao;
 
+    @Autowired
     public AuthService(UserService userService, PasswordEncoder passwordEncoder, JwtUtil jwtUtil, UserDao userDao) {
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;

@@ -73,10 +73,10 @@ databaseChangeLog:
                   name: created_at
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
-        - addCheckConstraint:
-            tableName: accounts
-            constraintName: chk_balance_non_negative
-            constraintBody: balance >= 0
+        - sql:
+            splitStatements: false
+            sql: |
+              ALTER TABLE accounts ADD CONSTRAINT chk_balance_non_negative CHECK (balance >= 0);
 
   - changeSet:
       id: 003-create-transactions
@@ -121,7 +121,7 @@ databaseChangeLog:
                   name: created_at
                   type: TIMESTAMP
                   defaultValueComputed: CURRENT_TIMESTAMP
-        - addCheckConstraint:
-            tableName: transactions
-            constraintName: chk_tx_amount_positive
-            constraintBody: amount > 0
+        - sql:
+            splitStatements: false
+            sql: |
+              ALTER TABLE transactions ADD CONSTRAINT chk_tx_amount_positive CHECK (amount > 0);

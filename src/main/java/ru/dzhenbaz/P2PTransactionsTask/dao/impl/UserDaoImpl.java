@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.dzhenbaz.P2PTransactionsTask.dao.UserDao;
@@ -14,6 +15,7 @@ public class UserDaoImpl implements UserDao {
     private final JdbcTemplate jdbcTemplate;
     private final UserRowMapper rowMapper = new UserRowMapper();
 
+    @Autowired
     public UserDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -40,5 +42,10 @@ public class UserDaoImpl implements UserDao {
         return jdbcTemplate.query("SELECT * FROM users WHERE username = ?", rowMapper, username)
                 .stream()
                 .findFirst();
+    }
+
+    @Override
+    public void deleteAll() {
+        jdbcTemplate.update("DELETE FROM users");
     }
 }

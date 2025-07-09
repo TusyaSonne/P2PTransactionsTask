@@ -9,4 +9,5 @@ public interface UserDao {
     void save(User user);
     Optional<User> findById(Long id);
     Optional<User> findByUsername(String username);
+    void deleteAll();
 }

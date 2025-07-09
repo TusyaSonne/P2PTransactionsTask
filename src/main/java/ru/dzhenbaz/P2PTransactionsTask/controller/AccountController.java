@@ -1,6 +1,7 @@
 package ru.dzhenbaz.P2PTransactionsTask.controller;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.dzhenbaz.P2PTransactionsTask.dto.CreateAccountRequest;
@@ -14,6 +15,7 @@ public class AccountController {
     private final AccountService accountService;
     private final JwtUtil jwtUtil;
 
+    @Autowired
     public AccountController(AccountService accountService, JwtUtil jwtUtil) {
         this.accountService = accountService;
         this.jwtUtil = jwtUtil;

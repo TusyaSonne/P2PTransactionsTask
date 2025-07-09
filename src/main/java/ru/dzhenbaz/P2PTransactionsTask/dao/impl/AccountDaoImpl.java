@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.dzhenbaz.P2PTransactionsTask.dao.AccountDao;
@@ -15,6 +16,7 @@ public class AccountDaoImpl implements AccountDao {
     private final JdbcTemplate jdbcTemplate;
     private final AccountRowMapper rowMapper = new AccountRowMapper();
 
+    @Autowired
     public AccountDaoImpl(JdbcTemplate jdbcTemplate) {
         this.jdbcTemplate = jdbcTemplate;
     }
@@ -50,5 +52,9 @@ public class AccountDaoImpl implements AccountDao {
     @Override
     public void closeAccount(Long accountId) {
         jdbcTemplate.update("UPDATE accounts SET is_closed = true WHERE id = ?", accountId);
+    }
+
+    public void deleteAll() {
+        jdbcTemplate.update("DELETE FROM accounts");
     }
 }

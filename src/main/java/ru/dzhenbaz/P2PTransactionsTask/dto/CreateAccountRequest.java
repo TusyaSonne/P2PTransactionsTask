@@ -2,7 +2,9 @@ package ru.dzhenbaz.P2PTransactionsTask.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class CreateAccountRequest {
 
     @NotNull(message = "Начальная сумма обязательна")

@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ru.dzhenbaz.P2PTransactionsTask.dao.UserDao;
 import ru.dzhenbaz.P2PTransactionsTask.model.User;
@@ -10,6 +11,7 @@ public class UserService {
 
     private final UserDao userDao;
 
+    @Autowired
     public UserService(UserDao userDao) {
         this.userDao = userDao;
     }

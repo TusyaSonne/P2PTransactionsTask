@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dzhenbaz.P2PTransactionsTask.dao.AccountDao;
@@ -18,6 +19,7 @@ public class TransactionService {
     private final AccountDao accountDao;
     private final TransactionDao transactionDao;
 
+    @Autowired
     public TransactionService(AccountDao accountDao, TransactionDao transactionDao) {
         this.accountDao = accountDao;
         this.transactionDao = transactionDao;

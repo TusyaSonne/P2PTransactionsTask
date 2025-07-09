@@ -8,4 +8,5 @@ public interface TransactionDao {
 
     void save(Transaction tx);
     List<Transaction> findAllByAccountId(Long accountId);
+    void deleteAll();
 }

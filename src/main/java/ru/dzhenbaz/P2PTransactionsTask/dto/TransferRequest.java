@@ -2,9 +2,13 @@ package ru.dzhenbaz.P2PTransactionsTask.dto;
 
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class TransferRequest {
 
     @NotNull(message = "Необходимо указать id счета-отправителя")

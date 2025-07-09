@@ -12,4 +12,5 @@ public interface AccountDao {
     List<Account> findByUserId(Long userId);
     void updateBalance(Long accountId, Long newBalance);
     void closeAccount(Long accountId);
+    void deleteAll();
 }
