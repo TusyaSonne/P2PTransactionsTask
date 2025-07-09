@@ -1,5 +1,11 @@
 package ru.dzhenbaz.P2PTransactionsTask.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +31,8 @@ import ru.dzhenbaz.P2PTransactionsTask.service.TransactionService;
  *
  * @author Dzhenbaz
  */
+@SecurityRequirement(name = "BearerAuth")
+@Tag(name = "Переводы", description = "Операции перевода между счетами (P2P)")
 @RestController
 @RequestMapping("/transactions")
 public class TransactionController {
@@ -51,8 +59,19 @@ public class TransactionController {
      * @param request    объект перевода
      * @return сообщение об успехе или подтверждении
      */
+    @Operation(
+            summary = "Выполнить или подтвердить перевод",
+            description = "Осуществляет P2P-перевод между счетами. Если флаг подтверждения отключён, вернёт сообщение для подтверждения перевода."
+    )
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "Перевод выполнен или требуется подтверждение"),
+            @ApiResponse(responseCode = "400", description = "Невалидный запрос, недостаточно средств или счёт закрыт"),
+            @ApiResponse(responseCode = "401", description = "Пользователь не авторизован"),
+            @ApiResponse(responseCode = "404", description = "Один из счетов не найден"),
+            @ApiResponse(responseCode = "403", description = "Счёт не принадлежит пользователю")
+    })
     @PostMapping("/transfer")
-    public ResponseEntity<?> transfer(@RequestHeader("Authorization") String authHeader,
+    public ResponseEntity<?> transfer(@Parameter(hidden = true) @RequestHeader("Authorization") String authHeader,
                                       @RequestBody @Valid TransferRequest request) {
         Long userId = extractUserId(authHeader);
         String message = transactionService.transfer(userId, request);

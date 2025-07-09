@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -19,12 +20,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Schema(description = "Запрос на перевод средств между счетами")
 public class TransferRequest {
 
     /**
      * Идентификатор счёта-отправителя.
      * Не может быть {@code null}.
      */
+    @Schema(description = "ID счёта, с которого осуществляется перевод", example = "1", required = true)
     @NotNull(message = "Необходимо указать id счета-отправителя")
     private Long fromAccountId;
 
@@ -32,6 +35,7 @@ public class TransferRequest {
      * Идентификатор счёта-получателя.
      * Не может быть {@code null}.
      */
+    @Schema(description = "ID счёта, на который осуществляется перевод", example = "2", required = true)
     @NotNull(message = "Необходимо указать id счета-получателя")
     private Long toAccountId;
 
@@ -41,11 +45,13 @@ public class TransferRequest {
      */
     @NotNull(message = "Необходимо указать сумму перевода")
     @Min(value = 0, message = "Сумма перевода не может быть отрицательной")
+    @Schema(description = "Сумма перевода в копейках", example = "15000", required = true)
     private Long amount;
 
     /**
      * Флаг подтверждения перевода.
      * {@code true} — операция будет выполнена, {@code false} — вернётся сообщение с запросом на подтверждение.
      */
+    @Schema(description = "Флаг подтверждения перевода", example = "false")
     private boolean confirm;
 }

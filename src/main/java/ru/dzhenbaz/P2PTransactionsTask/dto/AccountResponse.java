@@ -1,5 +1,7 @@
 package ru.dzhenbaz.P2PTransactionsTask.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 /**
  * DTO-объект для передачи информации о счёте клиенту.
  * <p>
@@ -10,8 +12,13 @@ package ru.dzhenbaz.P2PTransactionsTask.dto;
  *
  * @author Dzhenbaz
  */
+@Schema(description = "Информация о банковском счёте")
 public class AccountResponse {
+
+    @Schema(description = "Уникальный идентификатор счёта", example = "1001")
     private Long accountId;
+
+    @Schema(description = "Текущий баланс счёта в копейках", example = "150000")
     private Long balance;
 
     /**

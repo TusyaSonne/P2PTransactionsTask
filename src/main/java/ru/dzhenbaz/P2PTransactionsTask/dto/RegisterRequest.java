@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,12 +18,14 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
+@Schema(description = "Запрос на регистрацию нового пользователя")
 public class RegisterRequest {
 
     /**
      * Имя пользователя (логин).
      * Не может быть {@code null} и не должно превышать 50 символов.
      */
+    @Schema(description = "Имя пользователя (никнейм)", example = "dzhenbaz", required = true, maxLength = 50)
     @NotNull(message = "Никнейм не может быть пустым")
     @Size(max = 50, message = "Никнейм не может быть длиннее 50 символов")
     private String username;
@@ -31,7 +34,8 @@ public class RegisterRequest {
      * Пароль пользователя.
      * Не может быть {@code null} и должен содержать не менее 5 символов.
      */
+    @Schema(description = "Пароль (минимум 4 символов)", example = "securePass123", required = true, minLength = 4)
     @NotNull(message = "Пароль не может быть пустым")
-    @Size(min = 4, message = "Пароль должен быть минимум 5 символов")
+    @Size(min = 4, message = "Пароль должен быть минимум 4 символов")
     private String password;
 }

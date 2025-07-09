@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,12 +19,15 @@ import lombok.AllArgsConstructor;
  * @author Dzhenbaz
  */
 @AllArgsConstructor
+@Schema(description = "Запрос на создание банковского счёта")
 public class CreateAccountRequest {
 
     /**
      * Начальный баланс счёта (в копейках).
      * Не может быть {@code null} или отрицательным.
      */
+    @Schema(description = "Начальный баланс счёта в копейках (неотрицательное значение)",
+            example = "100000", required = true, minimum = "0")
     @NotNull(message = "Начальная сумма обязательна")
     @Min(value = 0, message = "Баланс не может быть отрицательным")
     private Long initialBalance;
