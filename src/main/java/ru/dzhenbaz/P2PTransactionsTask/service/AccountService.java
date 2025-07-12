@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.service;
 
+import lombok.extern.slf4j.Slf4j;
 import ru.dzhenbaz.P2PTransactionsTask.dao.AccountDao;
 import ru.dzhenbaz.P2PTransactionsTask.dto.AccountResponse;
 import ru.dzhenbaz.P2PTransactionsTask.exception.AccountClosedException;
@@ -21,6 +22,8 @@ import java.util.List;
  *
  * @author Dzhenbaz
  */
+
+@Slf4j
 public class AccountService {
 
     private final AccountDao accountDao;
@@ -43,6 +46,7 @@ public class AccountService {
     public void createAccount(Long userId, Long initialBalance) {
         Account account = new Account(null, userId, initialBalance, false, LocalDateTime.now());
         accountDao.save(account);
+        log.info("User {} created account with initial balance {}", userId, initialBalance);
     }
 
     /**
@@ -111,6 +115,7 @@ public class AccountService {
             throw new AccountClosedException("Счёт уже закрыт");
         }
         accountDao.closeAccount(accountId);
+        log.info("User {} closed account {}", userId, accountId);
     }
 
     /**

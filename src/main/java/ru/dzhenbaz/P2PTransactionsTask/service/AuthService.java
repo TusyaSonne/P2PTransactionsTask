@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.dzhenbaz.P2PTransactionsTask.dao.UserDao;
@@ -23,6 +24,8 @@ import java.time.LocalDateTime;
  *
  * @author Dzhenbaz
  */
+
+@Slf4j
 public class AuthService {
 
     private final UserService userService;
@@ -60,6 +63,9 @@ public class AuthService {
         String hashed = passwordEncoder.encode(request.getPassword());
         User user = new User(null, request.getUsername(), hashed, LocalDateTime.now());
         userDao.save(user);
+
+        log.info("New user registered with username '{}'", request.getUsername());
+
         return ResponseEntity.ok("Пользователь зарегистрирован");
     }
 
@@ -79,10 +85,13 @@ public class AuthService {
 
         var user = userOpt.get();
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            log.warn("Failed login attempt for username '{}'", request.getUsername());
             return ResponseEntity.status(401).body("Неверные учетные данные");
         }
 
         String token = jwtUtil.generateToken(user.getId());
+        log.info("User '{}' logged in successfully", request.getUsername());
+
         return ResponseEntity.ok(new JwtResponse(token));
     }
 }

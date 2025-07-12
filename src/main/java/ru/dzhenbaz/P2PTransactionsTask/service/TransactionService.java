@@ -1,5 +1,6 @@
 package ru.dzhenbaz.P2PTransactionsTask.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.transaction.annotation.Transactional;
 import ru.dzhenbaz.P2PTransactionsTask.dao.AccountDao;
 import ru.dzhenbaz.P2PTransactionsTask.dao.TransactionDao;
@@ -22,6 +23,8 @@ import java.time.LocalDateTime;
  *
  * @author Dzhenbaz
  */
+
+@Slf4j
 public class TransactionService {
 
     private final AccountDao accountDao;
@@ -85,12 +88,17 @@ public class TransactionService {
         }
 
         if (!request.isConfirm()) {
+            log.info("User {} initiated transfer confirmation for {} from {} to {}",
+                    userId, amount, fromId, toId);
             return String.format("Подтвердите перевод %d от счёта %d к счёту %d", amount, fromId, toId);
         }
 
         accountDao.updateBalance(fromId, from.getBalance() - amount);
         accountDao.updateBalance(toId, to.getBalance() + amount);
         transactionDao.save(new Transaction(null, fromId, toId, amount, LocalDateTime.now()));
+
+        log.info("User {} completed transfer of {} from account {} to account {}",
+                userId, amount, fromId, toId);
 
         return "Перевод выполнен";
     }
